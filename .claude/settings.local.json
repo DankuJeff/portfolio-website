@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pandoc \"C:\\\\Users\\\\tyler\\\\OneDrive\\\\Desktop\\\\Claude_Root\\\\AI_Career_Pivot_Tyler_Munstock.docx\" -t plain)",
+      "Bash(python -c \":*)",
+      "Bash(npx create-next-app@latest . --typescript --tailwind --app --import-alias \"@/*\" --no-git --yes)"
+    ]
+  }
+}
