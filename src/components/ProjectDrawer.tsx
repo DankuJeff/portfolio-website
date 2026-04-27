@@ -141,38 +141,53 @@ export default function ProjectDrawer({
 
               {/* Scrollable content */}
               <div className="flex-1 overflow-y-auto p-6 space-y-8">
-                {/* Screenshot placeholder */}
+                {/* Hero: video or thumbnail placeholder */}
                 <div
                   className="w-full rounded-xl border border-zinc-800 overflow-hidden"
                   style={{ aspectRatio: "16/9" }}
                 >
-                  <div
-                    className="w-full h-full flex flex-col items-center justify-center gap-3 bg-zinc-800"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(rgba(99,102,241,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.05) 1px, transparent 1px)",
-                      backgroundSize: "20px 20px",
-                    }}
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center">
-                      <svg
-                        className="w-6 h-6 text-indigo-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={1.5}
-                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                        />
-                      </svg>
+                  {project.videoUrl ? (
+                    <video
+                      src={project.videoUrl}
+                      poster={project.thumbnailUrl}
+                      controls
+                      className="w-full h-full object-cover"
+                    />
+                  ) : project.thumbnailUrl ? (
+                    <img
+                      src={project.thumbnailUrl}
+                      alt={project.title}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div
+                      className="w-full h-full flex flex-col items-center justify-center gap-3 bg-zinc-800"
+                      style={{
+                        backgroundImage:
+                          "linear-gradient(rgba(99,102,241,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.05) 1px, transparent 1px)",
+                        backgroundSize: "20px 20px",
+                      }}
+                    >
+                      <div className="w-12 h-12 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center">
+                        <svg
+                          className="w-6 h-6 text-indigo-400"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={1.5}
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                          />
+                        </svg>
+                      </div>
+                      <span className="text-xs font-mono text-zinc-600 tracking-widest uppercase">
+                        Screenshots coming soon
+                      </span>
                     </div>
-                    <span className="text-xs font-mono text-zinc-600 tracking-widest uppercase">
-                      Screenshots coming soon
-                    </span>
-                  </div>
+                  )}
                 </div>
 
                 {/* Overview */}
@@ -186,14 +201,32 @@ export default function ProjectDrawer({
                 </div>
 
                 {/* Architecture */}
-                {project.architecture && (
-                  <div className="rounded-xl border border-indigo-500/20 bg-indigo-950/30 p-4">
-                    <h3 className="text-xs font-mono text-indigo-400 uppercase tracking-widest mb-3">
+                {(project.architecture || project.architectureVideoUrl || project.architectureDiagramUrl) && (
+                  <div className="rounded-xl border border-indigo-500/20 bg-indigo-950/30 p-4 space-y-4">
+                    <h3 className="text-xs font-mono text-indigo-400 uppercase tracking-widest">
                       Architecture
                     </h3>
-                    <p className="text-sm text-zinc-300 leading-relaxed">
-                      {project.architecture}
-                    </p>
+                    {project.architectureVideoUrl && (
+                      <div className="rounded-lg overflow-hidden border border-indigo-500/10" style={{ aspectRatio: "16/9" }}>
+                        <video
+                          src={project.architectureVideoUrl}
+                          controls
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    )}
+                    {project.architecture && (
+                      <p className="text-sm text-zinc-300 leading-relaxed">
+                        {project.architecture}
+                      </p>
+                    )}
+                    {project.architectureDiagramUrl && (
+                      <img
+                        src={project.architectureDiagramUrl}
+                        alt="Architecture diagram"
+                        className="w-full rounded-lg border border-indigo-500/10"
+                      />
+                    )}
                   </div>
                 )}
 
@@ -231,6 +264,26 @@ export default function ProjectDrawer({
                     ))}
                   </div>
                 </div>
+
+                {/* Learnings */}
+                {project.learnings && project.learnings.length > 0 && (
+                  <div>
+                    <h3 className="text-xs font-mono text-zinc-500 uppercase tracking-widest mb-3">
+                      What I Learned
+                    </h3>
+                    <ul className="space-y-3">
+                      {project.learnings.map((item, i) => (
+                        <li
+                          key={i}
+                          className="flex gap-3 text-sm text-zinc-300 leading-relaxed"
+                        >
+                          <span className="mt-1.5 w-1 h-1 rounded-full bg-indigo-500 shrink-0" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
                 {/* Links */}
                 <div className="flex gap-3 pt-2">

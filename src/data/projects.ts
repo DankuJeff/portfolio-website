@@ -10,8 +10,13 @@ export interface Project {
   techStack: string[];
   githubUrl?: string;
   demoUrl?: string;
+  videoUrl?: string;
+  thumbnailUrl?: string;
+  architectureDiagramUrl?: string;
+  architectureVideoUrl?: string;
   highlights: string[];
   architecture?: string;
+  learnings?: string[];
 }
 
 export const projects: Project[] = [
@@ -53,25 +58,42 @@ export const projects: Project[] = [
   },
   {
     id: "claude-npc-guide",
-    title: "In-Game Claude NPC Guide",
-    tagline: "UE5 game characters powered by the Claude API.",
+    title: "Claude-Powered NPC Tutorial Guide",
+    tagline: "A UE5 tutorial NPC that watches what you do, builds context, and coaches you in real time — no scripted dialogue.",
     description:
-      "A Unreal Engine 5 project demonstrating how to integrate the Claude API into a game engine to power dynamic NPC characters — characters that respond to player behavior, remember context, and drive narrative branches in real time. Includes a full YouTube walkthrough of the architecture.",
-    status: "coming-soon",
+      "Most tutorial NPCs say the same lines every run regardless of what the player actually did. This project replaces that pattern with a live Claude API agent. On each failure, UPlayerActionMonitor classifies the cause, assembles a structured context snapshot with attempt count and frustration level, and sends it to Claude. The response is voiced through ElevenLabs and displayed via an in-game subtitle widget. AXIOM, the NPC, reacts to what happened on that specific attempt — not a timer, not a script.",
+    status: "live",
     year: 2026,
     techStack: [
-      "Unreal Engine 5",
+      "Unreal Engine 5.7",
       "C++",
       "Blueprints",
       "Claude API",
-      "TypeScript",
-      "WebSockets",
+      "ElevenLabs",
+      "NavMesh",
+      "USoundWaveProcedural",
     ],
+    githubUrl: "https://github.com/DankuJeff/npc-ai-tutorial-guide",
+    videoUrl: "/videos/npc-ai-tutorial-guide-highlight-reel.mp4",
+    thumbnailUrl: "/images/npc-ai-tutorial-guide-thumbnail.png",
+    architectureDiagramUrl: "/images/npc-ai-tutorial-guide-architecture-diagram.png",
+    architectureVideoUrl: "/videos/npc-ai-tutorial-guide-architecture-walkthrough.mp4",
     highlights: [
-      "Claude API integration directly into a UE5 C++ game loop — real-time LLM inference within interactive frame constraints",
-      "NPC memory and context management: conversation history, player state, world context passed to each API call",
-      "Behavior tree integration — Claude response drives BT task completion, not just dialogue text",
-      "Latency optimization: async API calls, streaming responses, fallback dialogue for slow connections",
+      "UPlayerActionMonitor classifies each jump failure by cause (too early, no run-up, walked off edge) using launch velocity recorded via MovementModeChangedDelegate",
+      "FNPCContext assembles attempt count, failure reason, and frustration level (0–10) into a structured snapshot per API call — tone escalation is injected context, not model-tracked state",
+      "Sliding-window conversation history (10 messages) keeps calls cheap while preserving enough context for AXIOM to reference prior attempts",
+      "Pending-request pattern: StartDemonstration() and MoveToPosition() check bIsSpeaking on entry, store deferred requests, and execute on OnSpeechFinished — AXIOM never walks mid-sentence",
+      "PCM audio streamed from ElevenLabs into USoundWaveProcedural with no disk I/O; completion timed from byte count because OnAudioFinished is unreliable for procedural waves in UE5",
+      "Stale-response guard: CurrentRequestId counter discards API responses that arrive out of order — slow failure coaching never interrupts a success line requested after it",
+    ],
+    architecture:
+      "UPlayerActionMonitor (component on the player) records launch velocity at takeoff and classifies failures on landing. On each trigger event it builds FNPCContext — challenge name, attempt count, last failure reason, frustration level — and passes it to UClaudeNPCSubsystem, which POSTs to the Claude API with a sliding-window conversation history and the AXIOM persona prompt. The response routes to AClaudeNPCCharacter, which renders it to the subtitle widget and calls UElevenLabsSubsystem::SpeakText(). PCM audio feeds into USoundWaveProcedural. When the timer fires OnSpeechCompleted, any pending NPC movement executes.",
+    learnings: [
+      "Frustration escalation belongs in the context, not the model. Injecting FrustrationLevel as a numeric field and mapping it to tone in the system prompt is more reliable and cheaper than having the model track emotional state across a conversation window.",
+      "Movement during speech was the hardest UX regression and the simplest fix. The pending-request pattern is about 30 lines of code. The feel difference to the player is substantial.",
+      "OnAudioFinished does not fire reliably for USoundWaveProcedural in UE5. Calculating playback duration from PCM byte count and driving completion via a FTimerHandle is the correct approach.",
+      "Stale responses need an explicit guard. Without CurrentRequestId, a slow coaching response from attempt 3 can arrive after the success line from attempt 4 has already fired, interrupting the congratulation mid-word.",
+      "Scripted waypoint jumps beat NavMesh for demo quality. CalcJumpLaunchVelocity() gives the NPC a predictable, repeatable arc — NavMesh cannot traverse gaps.",
     ],
   },
   {

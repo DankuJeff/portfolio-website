@@ -34,6 +34,22 @@ export default function ProjectCard({ project, onClick }: ProjectCardProps) {
             </div>
             <span className="text-xs font-mono text-zinc-600 tracking-widest uppercase">Coming Soon</span>
           </div>
+        ) : project.thumbnailUrl ? (
+          <>
+            <img
+              src={project.thumbnailUrl}
+              alt={project.title}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            {/* Hover arrow */}
+            <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="w-7 h-7 rounded-full bg-indigo-600/80 flex items-center justify-center">
+                <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </>
         ) : (
           <>
             {/* Placeholder grid pattern */}
