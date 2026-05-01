@@ -43,6 +43,9 @@ export const projects: Project[] = [
       "GitHub Actions",
     ],
     githubUrl: "https://github.com/DankuJeff/agentic-concierge",
+    videoUrl: "/videos/agentic-concierge-demo-video.mp4",
+    thumbnailUrl: "/images/agentic-concierge-thumbnail.png",
+    architectureDiagramUrl: "/images/agentic-concierge-architecture-diagram.png",
     highlights: [
       "Orchestrator + Specialists pattern: Conductor (Opus 4.6) decomposes requests into DAG task graphs; 5 specialists (Sonnet 4.6) execute in parallel where possible",
       "Real-time SSE task status streaming — live workflow visibility in the UI as tasks complete",
@@ -55,6 +58,13 @@ export const projects: Project[] = [
     ],
     architecture:
       "The Conductor uses Claude Opus 4.6 to convert a natural-language request into a DAG of typed tasks. Each task specifies its agent type, input references to prior task outputs, and a risk level (1–3) that determines whether it needs human approval before executing. The DAG executor (BullMQ) respects dependency ordering, handles approval gates, streams status via SSE, and recovers interrupted tasks on restart.",
+    learnings: [
+      "The in-process BullMQ worker is not a shortcut — it's the correct architecture when SSE and the job queue must share an EventEmitter. Extracting the worker to a separate process breaks SSE event delivery without Redis pub/sub as the bridge. Phase 4 can make that trade; Phase 1–3 should not.",
+      "App-level AES-256-GCM beats pgcrypto SQL functions for Drizzle projects. pgcrypto requires bytea columns and raw SQL that breaks the ORM abstraction. Encrypting at the Node layer keeps columns as text, works transparently with Drizzle, and the enc:v1: prefix enables zero-downtime migration of existing plaintext rows.",
+      "BullMQ concurrency is a rate-limit knob in disguise. Three parallel research tasks, each making 10–12 Claude API calls, saturates a 30K token/min org limit in under a minute. Dialing concurrency to 2 is a two-line fix that buys stability while the proper BullMQ rate limiter is plumbed in later.",
+      "Stateless frontend clarification is underrated. Accumulating Q&A rounds on the client and resending the enriched message on each retry avoids backend session complexity entirely. A three-round cap with a [FORCE DECOMPOSE] escape hatch is all the state management the prototype needs.",
+      "The Orchestrator + Specialists pattern is about context, not just parallelism. Each specialist agent runs with a clean, narrow context window focused on one task type. The Conductor's context stays clean because it only sees task summaries, not the full research or document content. This is what makes the system stable as workflow complexity scales.",
+    ],
   },
   {
     id: "claude-npc-guide",
