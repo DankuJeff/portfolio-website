@@ -1,52 +1,56 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
 import { projects } from "@/data/projects";
 import type { Project } from "@/data/projects";
 import ProjectCard from "@/components/ProjectCard";
 import ProjectDrawer from "@/components/ProjectDrawer";
 
 export default function Projects() {
-  const router = useRouter();
-  const pathname = usePathname();
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [originRect, setOriginRect] = useState<DOMRect | null>(null);
-  // Tracks URL changes caused by handleOpen so the effect doesn't double-open
-  const openedFromCard = useRef(false);
 
+  // Open the correct drawer on initial mount (direct URL navigation or page refresh)
   useEffect(() => {
-    if (openedFromCard.current) {
-      openedFromCard.current = false;
-      return;
-    }
-    const match = pathname.match(/^\/projects\/(.+)$/);
+    const match = window.location.pathname.match(/^\/projects\/(.+)$/);
     if (match) {
-      const slug = match[1];
-      const project = projects.find((p) => p.id === slug);
+      const project = projects.find((p) => p.id === match[1]);
       if (project) {
         setActiveProject(project);
+      }
+    }
+  }, []);
+
+  // Handle browser back/forward buttons
+  useEffect(() => {
+    function onPopState() {
+      const match = window.location.pathname.match(/^\/projects\/(.+)$/);
+      if (match) {
+        const project = projects.find((p) => p.id === match[1]);
+        if (project) {
+          setActiveProject(project);
+          setOriginRect(null);
+        }
+      } else {
+        setActiveProject(null);
         setOriginRect(null);
       }
-    } else {
-      // Browser back button or direct navigation to / — close drawer
-      setActiveProject(null);
-      setOriginRect(null);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
 
   function handleOpen(project: Project, rect: DOMRect) {
-    openedFromCard.current = true;
     setOriginRect(rect);
     setActiveProject(project);
-    router.push(`/projects/${project.id}`, { scroll: false });
+    // pushState updates the URL bar without triggering a route change or remount
+    window.history.pushState(null, "", `/projects/${project.id}`);
   }
 
   function handleClose() {
     setActiveProject(null);
     setOriginRect(null);
-    router.push("/", { scroll: false });
+    window.history.pushState(null, "", "/");
   }
 
   return (
