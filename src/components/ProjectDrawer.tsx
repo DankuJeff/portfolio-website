@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import type { Project } from "@/data/projects";
+import ImageLightbox from "@/components/ImageLightbox";
 
 interface ProjectDrawerProps {
   project: Project | null;
@@ -48,6 +49,7 @@ export default function ProjectDrawer({
   onClose,
 }: ProjectDrawerProps) {
   const isOpen = project !== null;
+  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
 
   const handleEscape = useCallback(
     (e: KeyboardEvent) => {
@@ -154,11 +156,22 @@ export default function ProjectDrawer({
                       className="w-full h-full object-cover"
                     />
                   ) : project.thumbnailUrl ? (
-                    <img
-                      src={project.thumbnailUrl}
-                      alt={project.title}
-                      className="w-full h-full object-cover"
-                    />
+                    <button
+                      className="relative w-full h-full group"
+                      onClick={() => setLightbox({ src: project.thumbnailUrl!, alt: project.title })}
+                      aria-label="View full-size image"
+                    >
+                      <img
+                        src={project.thumbnailUrl}
+                        alt={project.title}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors">
+                        <svg className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                        </svg>
+                      </div>
+                    </button>
                   ) : (
                     <div
                       className="w-full h-full flex flex-col items-center justify-center gap-3 bg-zinc-800"
@@ -221,11 +234,22 @@ export default function ProjectDrawer({
                       </p>
                     )}
                     {project.architectureDiagramUrl && (
-                      <img
-                        src={project.architectureDiagramUrl}
-                        alt="Architecture diagram"
-                        className="w-full rounded-lg border border-indigo-500/10"
-                      />
+                      <button
+                        className="relative w-full group"
+                        onClick={() => setLightbox({ src: project.architectureDiagramUrl!, alt: `${project.title} architecture diagram` })}
+                        aria-label="View full-size architecture diagram"
+                      >
+                        <img
+                          src={project.architectureDiagramUrl}
+                          alt="Architecture diagram"
+                          className="w-full rounded-lg border border-indigo-500/10"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/0 group-hover:bg-black/30 transition-colors">
+                          <svg className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                          </svg>
+                        </div>
+                      </button>
                     )}
                   </div>
                 )}
@@ -333,6 +357,14 @@ export default function ProjectDrawer({
           )}
         </div>
       </div>
+
+      {lightbox && (
+        <ImageLightbox
+          src={lightbox.src}
+          alt={lightbox.alt}
+          onClose={() => setLightbox(null)}
+        />
+      )}
     </>
   );
 }
