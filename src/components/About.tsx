@@ -20,7 +20,7 @@ const skillGroups = [
 const stats = [
   { value: "10+", label: "Years experience" },
   { value: "5", label: "Agent specialists built" },
-  { value: "10+", label: "Games shipped" },
+  { value: "10+", label: "Systems Shipped" },
 ];
 
 export default function About() {
