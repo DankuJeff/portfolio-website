@@ -68,8 +68,8 @@ export const projects: Project[] = [
   },
   {
     id: "claude-npc-guide",
-    title: "Claude-Powered NPC Tutorial Guide",
-    tagline: "A UE5 tutorial NPC that watches what you do, builds context, and coaches you in real time — no scripted dialogue.",
+    title: "Claude-Powered NPC Guide",
+    tagline: "A UE5 NPC that watches what you do, builds context, and coaches you in real time — no scripted dialogue.",
     description:
       "Most tutorial NPCs say the same lines every run regardless of what the player actually did. This project replaces that pattern with a live Claude API agent. On each failure, UPlayerActionMonitor classifies the cause, assembles a structured context snapshot with attempt count and frustration level, and sends it to Claude. The response is voiced through ElevenLabs and displayed via an in-game subtitle widget. AXIOM, the NPC, reacts to what happened on that specific attempt — not a timer, not a script.",
     status: "live",
@@ -190,7 +190,7 @@ export const projects: Project[] = [
     year: 2026,
     techStack: [
       "TypeScript",
-      "Next.js 16",
+      "Next.js 15",
       "Claude API",
       "Pinecone",
       "OpenAI Embeddings",

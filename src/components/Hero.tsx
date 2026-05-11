@@ -22,7 +22,7 @@ export default function Hero() {
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
         {/* Role badges */}
         <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
-          {["AI Systems Developer", "Developer Advocate", "Builder"].map((role) => (
+          {["AI Systems Developer", "Developer Advocate", "Technical Program Manager"].map((role) => (
             <span
               key={role}
               className="px-3 py-1 rounded-full text-xs font-mono tracking-widest uppercase border border-indigo-500/30 text-indigo-400 bg-indigo-500/5"

@@ -70,9 +70,21 @@ export default function Projects() {
           </p>
         </div>
 
-        {/* Project grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {projects.map((project) => (
+        {/* Featured projects */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+          {projects.slice(0, 2).map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onClick={handleOpen}
+              featured
+            />
+          ))}
+        </div>
+
+        {/* Secondary projects */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {projects.slice(2).map((project) => (
             <ProjectCard
               key={project.id}
               project={project}

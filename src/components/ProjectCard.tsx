@@ -3,9 +3,10 @@ import type { Project } from "@/data/projects";
 interface ProjectCardProps {
   project: Project;
   onClick: (project: Project, rect: DOMRect) => void;
+  featured?: boolean;
 }
 
-export default function ProjectCard({ project, onClick }: ProjectCardProps) {
+export default function ProjectCard({ project, onClick, featured = false }: ProjectCardProps) {
   const isComingSoon = project.status === "coming-soon";
 
   return (
@@ -19,11 +20,20 @@ export default function ProjectCard({ project, onClick }: ProjectCardProps) {
       className={`card-hover group relative flex flex-col rounded-xl border bg-zinc-900 overflow-hidden
         ${isComingSoon
           ? "border-zinc-800 opacity-60 cursor-default"
-          : "border-zinc-800 cursor-pointer"
+          : featured
+            ? "border-indigo-500/30 cursor-pointer"
+            : "border-zinc-800 cursor-pointer"
         }`}
     >
+      {featured && (
+        <div className="absolute top-3 left-3 z-10">
+          <span className="px-2 py-0.5 rounded text-xs font-mono bg-indigo-600/90 text-indigo-100 border border-indigo-500/50 tracking-widest uppercase">
+            Featured
+          </span>
+        </div>
+      )}
       {/* Screenshot placeholder */}
-      <div className="relative w-full aspect-video bg-zinc-800 overflow-hidden">
+      <div className={`relative w-full bg-zinc-800 overflow-hidden ${featured ? "aspect-[4/3]" : "aspect-video"}`}>
         {isComingSoon ? (
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
             <div className="w-10 h-10 rounded-full border-2 border-zinc-700 flex items-center justify-center">
