@@ -14,9 +14,9 @@ const SPECIALISTS: Specialist[] = [
 
 const CX = 500;
 const CY = 500;
-const RING_R = 360;
-const CONDUCTOR_R = 56;
-const SPECIALIST_R = 42;
+const RING_R = 340;
+const CONDUCTOR_R = 68;
+const SPECIALIST_R = 58;
 
 function specialistPos(angleDeg: number) {
   const rad = (angleDeg * Math.PI) / 180;
@@ -90,6 +90,7 @@ export default function AgentGraph() {
       preserveAspectRatio="xMidYMid meet"
       role="img"
       aria-label="Agent orchestration diagram: a Conductor agent dispatching tasks to five specialist agents."
+      style={{ shapeRendering: "geometricPrecision", textRendering: "geometricPrecision" }}
     >
       <defs>
         <radialGradient id="conductor-glow" cx="50%" cy="50%" r="50%">
@@ -130,6 +131,22 @@ export default function AgentGraph() {
         })}
       </g>
 
+      {/* Tokens (animated) — rendered before nodes so labels stay legible on top */}
+      {SPECIALISTS.map((s, i) => (
+        <circle
+          key={`token-${s.id}`}
+          ref={(el) => {
+            tokenRefs.current[i] = el;
+          }}
+          cx={CX}
+          cy={CY}
+          r={5}
+          fill="#818cf8"
+          filter="url(#token-glow)"
+          opacity={0}
+        />
+      ))}
+
       {/* Conductor outer halo (pulses) */}
       <circle
         ref={conductorPulseRef}
@@ -168,12 +185,12 @@ export default function AgentGraph() {
       </text>
       <text
         x={CX}
-        y={CY + 14}
+        y={CY + 16}
         textAnchor="middle"
         fontFamily="var(--font-geist-mono), ui-monospace, monospace"
-        fontSize={11}
+        fontSize={13}
         letterSpacing={1.5}
-        fill="#71717a"
+        fill="#a1a1aa"
       >
         opus 4.6
       </text>
@@ -202,9 +219,9 @@ export default function AgentGraph() {
               y={pos.y + 4}
               textAnchor="middle"
               fontFamily="var(--font-geist-mono), ui-monospace, monospace"
-              fontSize={11}
+              fontSize={14}
               letterSpacing={1.5}
-              fill="#a1a1aa"
+              fill="#d4d4d8"
               fontWeight={500}
             >
               {s.label}
@@ -212,22 +229,6 @@ export default function AgentGraph() {
           </g>
         );
       })}
-
-      {/* Tokens (animated) */}
-      {SPECIALISTS.map((s, i) => (
-        <circle
-          key={`token-${s.id}`}
-          ref={(el) => {
-            tokenRefs.current[i] = el;
-          }}
-          cx={CX}
-          cy={CY}
-          r={5}
-          fill="#818cf8"
-          filter="url(#token-glow)"
-          opacity={0}
-        />
-      ))}
     </svg>
   );
 }

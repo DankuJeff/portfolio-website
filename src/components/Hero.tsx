@@ -2,7 +2,7 @@ import AgentGraph from "@/components/AgentGraph";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section id="hero" className="relative min-h-screen flex items-center overflow-hidden">
       {/* Dot grid background */}
       <div className="dot-grid absolute inset-0 opacity-50" />
 
@@ -48,12 +48,12 @@ export default function Hero() {
 
           {/* Differentiator */}
           <p className="text-lg sm:text-xl text-zinc-400 font-light leading-relaxed max-w-xl mb-3">
-            10 years building AI-driven game systems in Unreal Engine 5.
+            A decade engineering production systems — game AI, real-time pipelines, developer tooling.
           </p>
           <p className="text-lg sm:text-xl text-zinc-300 font-light leading-relaxed max-w-xl mb-10">
             Now building{" "}
             <span className="text-indigo-300 font-medium">AI applications</span>{" "}
-            — agents, orchestrators, and developer tools.
+            — agents, orchestrators, and safety frameworks.
           </p>
 
           {/* CTAs */}
@@ -82,7 +82,7 @@ export default function Hero() {
         </div>
 
         {/* Right — agent graph */}
-        <div className="relative w-full aspect-square max-w-[560px] mx-auto lg:mx-0 lg:justify-self-end">
+        <div className="relative w-full aspect-square max-w-[340px] sm:max-w-[440px] lg:max-w-[560px] mx-auto lg:mx-0 lg:justify-self-end">
           {/* Caption above graph */}
           <div className="absolute top-0 left-0 right-0 -translate-y-8 flex items-center justify-between text-[10px] font-mono tracking-widest uppercase text-zinc-600 z-10">
             <span className="flex items-center gap-2">
