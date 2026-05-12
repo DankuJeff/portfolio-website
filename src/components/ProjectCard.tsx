@@ -1,4 +1,6 @@
 import type { Project } from "@/data/projects";
+import TechChip from "@/components/TechChip";
+import { sortByIconAvailability } from "@/lib/techIcons";
 
 interface ProjectCardProps {
   project: Project;
@@ -116,19 +118,16 @@ export default function ProjectCard({ project, onClick, featured = false }: Proj
           {project.tagline}
         </p>
 
-        {/* Tech stack chips */}
+        {/* Tech stack — icons come first, then text fallbacks */}
         <div className="flex flex-wrap gap-1.5 mt-auto pt-2">
-          {project.techStack.slice(0, 6).map((tech) => (
-            <span
-              key={tech}
-              className="px-2 py-0.5 rounded text-xs font-mono bg-zinc-800 text-zinc-400 border border-zinc-700/50"
-            >
-              {tech}
-            </span>
-          ))}
-          {project.techStack.length > 6 && (
-            <span className="px-2 py-0.5 rounded text-xs font-mono bg-zinc-800 text-zinc-600 border border-zinc-700/50">
-              +{project.techStack.length - 6}
+          {sortByIconAvailability(project.techStack)
+            .slice(0, 8)
+            .map((tech) => (
+              <TechChip key={tech} name={tech} size="sm" />
+            ))}
+          {project.techStack.length > 8 && (
+            <span className="h-7 px-2 inline-flex items-center rounded-md text-[10px] font-mono bg-zinc-900 text-zinc-600 border border-zinc-800">
+              +{project.techStack.length - 8}
             </span>
           )}
         </div>

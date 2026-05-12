@@ -3,6 +3,8 @@
 import { useEffect, useCallback, useState } from "react";
 import type { Project } from "@/data/projects";
 import ImageLightbox from "@/components/ImageLightbox";
+import TechChip from "@/components/TechChip";
+import { sortByIconAvailability } from "@/lib/techIcons";
 
 interface ProjectDrawerProps {
   project: Project | null;
@@ -278,13 +280,8 @@ export default function ProjectDrawer({
                     Tech Stack
                   </h3>
                   <div className="flex flex-wrap gap-2">
-                    {project.techStack.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-3 py-1 rounded-lg text-xs font-mono bg-zinc-800 text-zinc-300 border border-zinc-700"
-                      >
-                        {tech}
-                      </span>
+                    {sortByIconAvailability(project.techStack).map((tech) => (
+                      <TechChip key={tech} name={tech} size="md" />
                     ))}
                   </div>
                 </div>
