@@ -1,26 +1,47 @@
 const skillGroups = [
   {
     label: "AI & APIs",
-    skills: ["Claude API", "Claude Code", "Multi-agent Systems", "Anthropic SDK", "pgvector", "RAG"],
+    skills: [
+      "Claude API",
+      "Claude Code",
+      "Multi-agent Systems",
+      "Anthropic SDK",
+      "OpenAI Embeddings",
+      "Pinecone",
+      "pgvector",
+      "RAG",
+      "ElevenLabs",
+    ],
   },
   {
     label: "Game Dev",
-    skills: ["Unreal Engine 5", "C++", "Blueprints", "Behavior Trees", "EQS", "NavMesh", "GAS", "Niagara", "FMOD"],
+    skills: ["Unreal Engine 5", "C++", "Blueprints", "NavMesh"],
   },
   {
     label: "Web & Backend",
-    skills: ["TypeScript", "Node.js", "Fastify", "React", "Next.js", "PostgreSQL", "Redis", "BullMQ", "Drizzle"],
+    skills: [
+      "TypeScript",
+      "Python",
+      "Node.js",
+      "Fastify",
+      "FastAPI",
+      "React",
+      "Next.js",
+      "Tailwind CSS",
+      "Vite",
+      "PostgreSQL",
+      "SQLite",
+      "Redis",
+      "BullMQ",
+      "Drizzle",
+      "SQLAlchemy",
+      "Recharts",
+    ],
   },
   {
     label: "DevOps & Tools",
     skills: ["Docker", "GitHub Actions", "Vercel", "Google OAuth2", "WebSockets", "SSE"],
   },
-];
-
-const stats = [
-  { value: "10+", label: "Years experience" },
-  { value: "5", label: "Agent specialists built" },
-  { value: "10+", label: "Systems Shipped" },
 ];
 
 export default function About() {
@@ -65,15 +86,6 @@ export default function About() {
               </p>
             </div>
 
-            {/* Stats */}
-            <div className="flex gap-8 pt-4 border-t border-zinc-800/60">
-              {stats.map((stat) => (
-                <div key={stat.label} className="flex flex-col gap-0.5">
-                  <span className="text-2xl font-bold gradient-text">{stat.value}</span>
-                  <span className="text-xs text-zinc-500 font-mono">{stat.label}</span>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* Right — skills */}
