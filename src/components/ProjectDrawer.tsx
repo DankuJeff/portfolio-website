@@ -6,6 +6,8 @@ import ImageLightbox from "@/components/ImageLightbox";
 import AgenticArchitectureDiagram from "@/components/AgenticArchitectureDiagram";
 import NPCArchitectureDiagram from "@/components/NPCArchitectureDiagram";
 import RAGArchitectureDiagram from "@/components/RAGArchitectureDiagram";
+import ContentModerationArchitectureDiagram from "@/components/ContentModerationArchitectureDiagram";
+import RedTeamArchitectureDiagram from "@/components/RedTeamArchitectureDiagram";
 import TechChip from "@/components/TechChip";
 import { sortByIconAvailability } from "@/lib/techIcons";
 
@@ -58,6 +60,8 @@ export default function ProjectDrawer({
   const [diagramExpanded, setDiagramExpanded] = useState(false);
   const [npcDiagramExpanded, setNpcDiagramExpanded] = useState(false);
   const [ragDiagramExpanded, setRagDiagramExpanded] = useState(false);
+  const [contentModDiagramExpanded, setContentModDiagramExpanded] = useState(false);
+  const [redTeamDiagramExpanded, setRedTeamDiagramExpanded] = useState(false);
 
   const handleEscape = useCallback(
     (e: KeyboardEvent) => {
@@ -65,10 +69,12 @@ export default function ProjectDrawer({
         if (diagramExpanded) setDiagramExpanded(false);
         else if (npcDiagramExpanded) setNpcDiagramExpanded(false);
         else if (ragDiagramExpanded) setRagDiagramExpanded(false);
+        else if (contentModDiagramExpanded) setContentModDiagramExpanded(false);
+        else if (redTeamDiagramExpanded) setRedTeamDiagramExpanded(false);
         else onClose();
       }
     },
-    [onClose, diagramExpanded, npcDiagramExpanded, ragDiagramExpanded]
+    [onClose, diagramExpanded, npcDiagramExpanded, ragDiagramExpanded, contentModDiagramExpanded, redTeamDiagramExpanded]
   );
 
   useEffect(() => {
@@ -227,7 +233,7 @@ export default function ProjectDrawer({
                 </div>
 
                 {/* Architecture */}
-                {(project.architecture || project.architectureVideoUrl || project.architectureDiagramUrl || project.id === "agentic-concierge" || project.id === "claude-npc-guide" || project.id === "rag-vector-showcase") && (
+                {(project.architecture || project.architectureVideoUrl || project.architectureDiagramUrl || project.id === "agentic-concierge" || project.id === "claude-npc-guide" || project.id === "rag-vector-showcase" || project.id === "content-moderation-pipeline" || project.id === "llm-redteam-eval") && (
                   <div className="rounded-xl border border-indigo-500/20 bg-indigo-950/30 p-4 space-y-4">
                     <h3 className="text-xs font-mono text-indigo-400 uppercase tracking-widest">
                       Architecture
@@ -265,6 +271,20 @@ export default function ProjectDrawer({
                         <RAGArchitectureDiagram
                           maxWidth={560}
                           onExpand={() => setRagDiagramExpanded(true)}
+                        />
+                      </div>
+                    ) : project.id === "content-moderation-pipeline" ? (
+                      <div className="rounded-lg overflow-hidden border border-indigo-500/10">
+                        <ContentModerationArchitectureDiagram
+                          maxWidth={560}
+                          onExpand={() => setContentModDiagramExpanded(true)}
+                        />
+                      </div>
+                    ) : project.id === "llm-redteam-eval" ? (
+                      <div className="rounded-lg overflow-hidden border border-indigo-500/10">
+                        <RedTeamArchitectureDiagram
+                          maxWidth={560}
+                          onExpand={() => setRedTeamDiagramExpanded(true)}
                         />
                       </div>
                     ) : project.architectureDiagramUrl ? (
@@ -464,6 +484,54 @@ export default function ProjectDrawer({
             onClick={e => e.stopPropagation()}
           >
             <RAGArchitectureDiagram />
+          </div>
+        </div>
+      )}
+
+      {contentModDiagramExpanded && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4"
+          style={{ animation: "lightbox-in 0.2s ease" }}
+          onClick={() => setContentModDiagramExpanded(false)}
+        >
+          <button
+            className="absolute top-4 right-4 p-2 rounded-lg border border-zinc-700 text-zinc-400 hover:text-zinc-100 hover:border-zinc-500 transition-colors"
+            onClick={() => setContentModDiagramExpanded(false)}
+            aria-label="Close diagram"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <div
+            className="rounded-xl overflow-hidden border border-indigo-500/20 shadow-2xl"
+            onClick={e => e.stopPropagation()}
+          >
+            <ContentModerationArchitectureDiagram />
+          </div>
+        </div>
+      )}
+
+      {redTeamDiagramExpanded && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 backdrop-blur-sm p-4"
+          style={{ animation: "lightbox-in 0.2s ease" }}
+          onClick={() => setRedTeamDiagramExpanded(false)}
+        >
+          <button
+            className="absolute top-4 right-4 p-2 rounded-lg border border-zinc-700 text-zinc-400 hover:text-zinc-100 hover:border-zinc-500 transition-colors"
+            onClick={() => setRedTeamDiagramExpanded(false)}
+            aria-label="Close diagram"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <div
+            className="rounded-xl overflow-hidden border border-indigo-500/20 shadow-2xl"
+            onClick={e => e.stopPropagation()}
+          >
+            <RedTeamArchitectureDiagram />
           </div>
         </div>
       )}
